@@ -1,0 +1,83 @@
+{
+  "name": "audio-visualizer",
+  "version": "1.0.0",
+  "description": "A stunning 3D audio visualizer component for React applications using Three.js",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs",
+    "dev": "rollup -c -w --bundleConfigAsCjs",
+    "lint": "eslint .",
+    "test": "jest",
+    "prepublishOnly": "npm run build",
+    "build:examples": "cross-env NODE_ENV=production vite build --config vite.examples.config.js",
+    "dev:examples": "vite --config vite.examples.config.js --port 3000",
+    "deploy:examples": "npm run build:examples && gh-pages -d examples-dist",
+    "deploy:package": "npm run build && git checkout package && git pull origin package && rm -rf dist-temp && mkdir dist-temp && cp -r dist/* dist-temp/ && rm -rf dist && rm -rf ./* && cp -r dist-temp/* . && rm -rf dist-temp && git add . && git commit -m \"Update package distribution\" && git push origin package && git checkout master"
+  },
+  "keywords": [
+    "react",
+    "audio",
+    "visualizer",
+    "three.js",
+    "3d",
+    "webgl",
+    "music",
+    "sound",
+    "visualization"
+  ],
+  "author": "Ampcome",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "three": "^0.150.0 || ^0.160.0 || ^0.170.0 || ^0.176.0"
+  },
+  "dependencies": {
+    "dat.gui": "^0.7.9"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@tailwindcss/vite": "^4.1.6",
+    "@types/dat.gui": "^0.7.10",
+    "@types/jest": "^29.5.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.176.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.14",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.40.0",
+    "gh-pages": "^6.0.0",
+    "jest": "^29.5.0",
+    "postcss": "^8.4.24",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^6.10.0",
+    "rollup": "^3.20.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "tailwindcss": "^3.3.2",
+    "three": "^0.176.0",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ampcome/audio-visualizer"
+  },
+  "bugs": {
+    "url": "https://github.com/Ampcome/audio-visualizer/issues"
+  },
+  "homepage": "https://github.com/Ampcome/audio-visualizer#readme"
+}
