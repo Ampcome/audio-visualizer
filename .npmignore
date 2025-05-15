@@ -1,0 +1,40 @@
+# Development files
+node_modules/
+src/
+examples/
+.gitignore
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+
+# Build and test files
+rollup.config.js
+tsconfig.json
+jest.config.js
+*.test.ts
+*.test.tsx
+__tests__/
+coverage/
+
+# Documentation and examples that shouldn't be published
+docs/
+demo/
+screenshots/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor config files
+.editorconfig
+.prettierrc
+.eslintrc
+
+# Temporary files
+.tmp/
+.temp/
+.cache/

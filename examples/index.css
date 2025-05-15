@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-white leading-relaxed;
+  }
+}
+
+@layer components {
+  .app-container {
+    @apply max-w-7xl mx-auto p-8 min-h-screen flex flex-col;
+  }
+
+  header {
+    @apply mb-8 text-center;
+  }
+
+  h1 {
+    @apply text-4xl mb-2 text-primary font-bold;
+  }
+
+  .subtitle {
+    @apply text-lg text-white/70 mb-8;
+  }
+
+  nav {
+    @apply my-8;
+  }
+
+  .nav-links {
+    @apply flex justify-center gap-6 list-none;
+  }
+
+  .nav-links a {
+    @apply text-white no-underline text-lg px-4 py-2 rounded transition-all duration-300;
+  }
+
+  .nav-links a:hover {
+    @apply bg-primary/10;
+  }
+
+  .nav-links a.active {
+    @apply text-primary border-b-2 border-primary;
+  }
+
+  main {
+    @apply flex-1 w-full h-[500px] relative rounded-lg overflow-hidden shadow-visualizer;
+  }
+
+  footer {
+    @apply mt-12 pt-4 border-t border-white/10;
+  }
+
+  .footer-content {
+    @apply flex justify-between items-center text-white/50 text-sm;
+  }
+
+  .footer-content a {
+    @apply text-primary no-underline;
+  }
+
+  .footer-content a:hover {
+    @apply underline;
+  }
+}
+
+@layer utilities {
+  .visualizer-container {
+    @apply w-full h-full;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    @apply p-4;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  .nav-links {
+    @apply flex-col items-center gap-2;
+  }
+
+  main {
+    @apply h-[400px];
+  }
+
+  .footer-content {
+    @apply flex-col gap-2;
+  }
+}
