@@ -3,9 +3,13 @@ import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import dts from "rollup-plugin-dts";
+import { dts } from "rollup-plugin-dts";
+import { readFileSync } from "fs";
 
-const packageJson = require("./package.json");
+// Read package.json as JSON since we're in ESM context
+const packageJson = JSON.parse(
+  readFileSync(new URL("./package.json", import.meta.url), "utf8")
+);
 
 // List all dependencies and peerDependencies to mark as external
 const external = [
@@ -45,6 +49,8 @@ export default [
         ],
         sourceMap: true,
         inlineSources: true,
+        declaration: true,
+        declarationDir: "./dist/types",
       }),
       terser({
         format: {
@@ -58,8 +64,9 @@ export default [
     external,
   },
   {
-    input: "dist/esm/types/index.d.ts",
+    input: "src/index.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
     plugins: [dts()],
+    external,
   },
 ];

@@ -234,16 +234,6 @@ export const AudioVisualizer = ({
     scene.add(mesh);
     meshRef.current = mesh;
 
-    // Setup post-processing
-    const params: BloomParams & ColorParams = {
-      red: initialColors?.red ?? 1.0,
-      green: initialColors?.green ?? 1.0,
-      blue: initialColors?.blue ?? 1.0,
-      threshold: bloomParamsRef.current.threshold,
-      strength: bloomParamsRef.current.strength,
-      radius: bloomParamsRef.current.radius,
-    };
-
     // Create render pass
     const renderScene = new RenderPass(sceneRef.current, cameraRef.current);
 
@@ -542,7 +532,6 @@ export const AudioVisualizer = ({
           }
         } else {
           // Idle animation with subtle movement
-          const time = clockRef.current.getElapsedTime();
           uniformsRef.current.u_amplitude.value = 0;
           uniformsRef.current.u_bass.value = 0;
           uniformsRef.current.u_mid.value = 0;
