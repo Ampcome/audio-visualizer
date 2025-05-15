@@ -19,7 +19,7 @@
     "build:examples": "cross-env NODE_ENV=production vite build --config vite.examples.config.js",
     "dev:examples": "vite --config vite.examples.config.js --port 3000",
     "deploy:examples": "npm run build:examples && gh-pages -d examples-dist",
-    "deploy:package": "npm run build && git checkout package && git pull origin package && rm -rf dist-temp && mkdir dist-temp && cp -r dist/* dist-temp/ && rm -rf dist && rm -rf ./* && cp -r dist-temp/* . && rm -rf dist-temp && git add . && git commit -m \"Update package distribution\" && git push origin package && git checkout main"
+    "deploy:package": "npm run build && git checkout package && git pull origin package && rm -rf dist-temp && mkdir dist-temp && cp -r dist/* dist-temp/ && rm -rf dist && rm -rf ./* && cp -r dist-temp/* . && rm -rf dist-temp && git add . && git commit -m \"Update package distribution\" && git push origin package && git checkout master"
   },
   "keywords": [
     "react",
