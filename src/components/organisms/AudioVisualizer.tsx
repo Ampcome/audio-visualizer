@@ -107,17 +107,17 @@ function AudioVisualizer({ audioData, isListening }: VisualizerProps) {
     u_bass: { value: 0.5 },
     u_mid: { value: 0.5 },
     u_treble: { value: 0.5 },
-    u_red: { value: 1.0 },
-    u_green: { value: 1.0 },
-    u_blue: { value: 1.0 },
+    u_red: { value: 0.8745 },
+    u_green: { value: 0.4314 },
+    u_blue: { value: 0.6902 },
     u_detail: { value: getDetailLevel(quality) }, // Control noise detail level
   });
 
   // Bloom parameters with default values matching audiovisualizer-main
   const bloomParamsRef = useRef<BloomParams>({
     threshold: 0.5,
-    strength: 0.3,
-    radius: 0.8,
+    strength: 0.2,
+    radius: 0.5,
   });
 
   useEffect(() => {
@@ -459,21 +459,21 @@ function AudioVisualizer({ audioData, isListening }: VisualizerProps) {
             // Apply audio data to uniforms with high multipliers for visible effect
             uniformsRef.current.u_bass.value =
               uniformsRef.current.u_bass.value * (1 - smoothingFactor) +
-              (bassAvg / 255) * 7.5 * smoothingFactor;
+              (bassAvg / 255) * 5 * smoothingFactor;
 
             uniformsRef.current.u_mid.value =
               uniformsRef.current.u_mid.value * (1 - smoothingFactor) +
-              (midAvg / 255) * 7.5 * smoothingFactor;
+              (midAvg / 255) * 5 * smoothingFactor;
 
             uniformsRef.current.u_treble.value =
               uniformsRef.current.u_treble.value * (1 - smoothingFactor) +
-              (trebleAvg / 255) * 7.5 * smoothingFactor;
+              (trebleAvg / 255) * 5 * smoothingFactor;
 
             // Overall amplitude based on average volume
             const avgVolume = (bassAvg + midAvg + trebleAvg) / 3;
             uniformsRef.current.u_amplitude.value =
               uniformsRef.current.u_amplitude.value * (1 - smoothingFactor) +
-              (0.5 + (avgVolume / 255) * 7.5) * smoothingFactor;
+              (0.5 + (avgVolume / 255) * 5) * smoothingFactor;
           } catch (error) {
             console.error("Error in animation loop:", error);
             // Fall back to gentle animation on error
