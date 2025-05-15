@@ -18,9 +18,9 @@ A stunning 3D audio visualizer component for React applications using Three.js w
 ## Installation
 
 ```bash
-npm install Ampcome/audio-visualizer#package
+npm install [https://github.com/Ampcome/audio-visualizer.git#package](https://github.com/Ampcome/audio-visualizer.git#package)
 # or
-yarn add Ampcome/audio-visualizer#package
+yarn add [https://github.com/Ampcome/audio-visualizer.git#package](https://github.com/Ampcome/audio-visualizer.git#package)
 ```
 
 ## Basic Usage
