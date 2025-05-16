@@ -15,7 +15,6 @@ import {
   VisualizerProps,
   ShaderUniforms,
   BloomParams,
-  ColorParams,
 } from "../types";
 
 /**
@@ -34,6 +33,7 @@ export const AudioVisualizer = ({
   enableOrbitControls = true,
   autoRotate = false,
   showGui = false,
+  guiPositionTop = 100,
   inertiaEnabled = true,
   inertiaLevel = 0.05,
   zoomEnabled = false,
@@ -328,6 +328,9 @@ export const AudioVisualizer = ({
     // Add GUI if enabled
     if (showGui) {
       const gui = new GUI();
+      gui.domElement.style.position = 'absolute';
+      gui.domElement.style.top = `${guiPositionTop}px`;
+      gui.domElement.style.right = '0px';
       guiRef.current = gui;
 
       // Add color controls
@@ -335,7 +338,7 @@ export const AudioVisualizer = ({
       colorFolder.add(uniformsRef.current.u_red, "value", 0, 1).name("Red");
       colorFolder.add(uniformsRef.current.u_green, "value", 0, 1).name("Green");
       colorFolder.add(uniformsRef.current.u_blue, "value", 0, 1).name("Blue");
-      colorFolder.open();
+      // colorFolder.open();
 
       // Add bloom controls
       const bloomFolder = gui.addFolder("Bloom");
@@ -363,7 +366,7 @@ export const AudioVisualizer = ({
             bloomPassRef.current.radius = value;
           }
         });
-      bloomFolder.open();
+      // bloomFolder.open();
 
       // Add quality control
       const settingsFolder = gui.addFolder("Settings");
@@ -373,7 +376,7 @@ export const AudioVisualizer = ({
         .onChange((value: "low" | "medium" | "high") => {
           setQuality(value);
         });
-      settingsFolder.open();
+      // settingsFolder.open();
     }
 
     // Handle window resize
@@ -424,8 +427,6 @@ export const AudioVisualizer = ({
     enableOrbitControls,
     autoRotate,
     showGui,
-    orbColors,
-    initialGlow,
     inertiaEnabled,
     inertiaLevel,
     zoomEnabled,

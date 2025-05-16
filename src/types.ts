@@ -60,6 +60,13 @@ export interface VisualizerProps {
   showGui?: boolean;
 
   /**
+   * gui position top
+   * only effective with showGui enabled
+   * @default 150
+   */
+  guiPositionTop?: number;
+
+  /**
    * Custom class name for the container
    */
   className?: string;

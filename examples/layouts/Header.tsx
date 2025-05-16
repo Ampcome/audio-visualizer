@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const Header: React.FC<{}> = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  // const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
 
-  const toggleMenu = (): void => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // const toggleMenu = (): void => {
+  //   setIsMenuOpen(!isMenuOpen);
+  // };
 
   // Debounced scroll handler to improve performance
   const handleScroll = useCallback((): void => {
@@ -33,7 +33,7 @@ const Header: React.FC<{}> = () => {
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-300 backdrop-blur-md ${
         scrolled ? "bg-black/80 backdrop-blur-md" : "bg-transparent"
       }`}
     >
@@ -82,7 +82,7 @@ const Header: React.FC<{}> = () => {
             <span>GitHub</span>
           </a>
         </nav>
-        <button className="md:hidden text-white">
+        {/* <button className="md:hidden text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
@@ -97,7 +97,7 @@ const Header: React.FC<{}> = () => {
               d="M4 6h16M4 12h16M4 18h16"
             />
           </svg>
-        </button>
+        </button> */}
       </div>
     </header>
   );

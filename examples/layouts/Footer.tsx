@@ -91,9 +91,20 @@ const Footer: React.FC<{}> = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-center items-center">
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4">
           <p className="text-sm">
             © {new Date().getFullYear()} Audio Visualizer. All rights reserved.
+          </p>
+          <p className="text-sm">
+            This package is inspired by{" "}
+            <a
+              href="https://github.com/WaelYasmina/audiovisualizer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors font-medium"
+            >
+              audiovisualizer
+            </a>
           </p>
         </div>
       </div>
