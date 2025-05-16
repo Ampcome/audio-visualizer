@@ -1,5 +1,3 @@
-![Audio Visualizer Logo](./examples/assets/favicon.ico)
-
 # Audio Visualizer
 
 ```
@@ -7,8 +5,6 @@
 $ echo "Crafted with precision and care"
 $ open https://ampcome.com
 ```
-![Ampcome](./examples/assets/ampcome.avif)
-
 [View Demo](https://ampcome.github.io/audio-visualizer/#/) | [Features](#features) | [Installation](#installation) | [Usage](#usage) | [API Reference](#api-reference)
 
 ![Audio Visualizer Demo](./examples/assets/visualizer.gif)
