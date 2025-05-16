@@ -162,7 +162,6 @@ Mobile browsers are also supported, though performance may vary depending on the
 The 3D audio visualization can be resource-intensive, especially on lower-end devices. Consider the following tips for optimal performance:
 
 - Use the `initialQuality` option to adjust rendering quality based on target devices
-- Set `showStats: true` during development to monitor performance
 - For mobile devices, consider using the 'low' quality setting
 - Disable `autoRotate` and `showGui` on lower-end devices to improve performance
 - The visualizer automatically detects device capabilities and adjusts settings accordingly
