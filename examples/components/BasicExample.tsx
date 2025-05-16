@@ -26,7 +26,7 @@ export const BasicExample = (): JSX.Element => {
       <div className="text-center z-10 p-8 bg-black/80 rounded-lg backdrop-blur-md">
         <button
           onClick={handleToggleListening}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          className="px-6 py-3 bg-gradient-to-r from-rose-600 to-fuchsia-700 text-white rounded-lg transition-colors"
         >
           {isListening ? "Stop Listening" : "Start Listening"}
         </button>

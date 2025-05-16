@@ -26,19 +26,22 @@ import {
 export const AudioVisualizer = ({
   audioData,
   isListening,
-  options = {},
+  initialQuality = "medium",
+  orbColors,
+  canvasColor = 0x000000,
+  initialGlow,
+  // showStats = false,
+  enableOrbitControls = true,
+  autoRotate = false,
+  showGui = false,
+  inertiaEnabled = true,
+  inertiaLevel = 0.05,
+  zoomEnabled = false,
+  spikeLevel = 5.5,
+  smoothnessLevel = 0.7,
+  className = "",
+  containerStyle = {},
 }: VisualizerProps): JSX.Element => {
-  const {
-    initialQuality = "medium",
-    initialColors,
-    initialBloom,
-    showStats = false,
-    enableOrbitControls = true,
-    autoRotate = false,
-    showGui = false,
-    className = "",
-  } = options;
-
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const meshRef = useRef<THREE.Mesh | null>(null);
@@ -83,6 +86,61 @@ export const AudioVisualizer = ({
     };
   }, [initialQuality]);
 
+  // Helper function to parse various color formats to THREE.Color
+  const parseColor = (
+    color: number | string | { r: number; g: number; b: number }
+  ): THREE.Color => {
+    if (typeof color === "number") {
+      return new THREE.Color(color);
+    } else if (typeof color === "string") {
+      return new THREE.Color(color);
+    } else if (
+      color &&
+      typeof color === "object" &&
+      "r" in color &&
+      "g" in color &&
+      "b" in color
+    ) {
+      return new THREE.Color(color.r / 255, color.g / 255, color.b / 255);
+    }
+    // Default fallback
+    return new THREE.Color(0x000000);
+  };
+
+  // Helper function to convert color to CSS string
+  const colorToCssString = (
+    color: number | string | { r: number; g: number; b: number }
+  ): string => {
+    if (typeof color === "number") {
+      return `#${color.toString(16).padStart(6, "0")}`;
+    } else if (typeof color === "string") {
+      // If it's already a valid CSS color, return it
+      if (
+        color.startsWith("#") ||
+        color.startsWith("rgb") ||
+        /^[a-z]+$/i.test(color)
+      ) {
+        return color;
+      }
+      // Try to convert hex string without # to proper format
+      if (/^[0-9A-F]{6}$/i.test(color)) {
+        return `#${color}`;
+      }
+      // Fallback
+      return "#000000";
+    } else if (
+      color &&
+      typeof color === "object" &&
+      "r" in color &&
+      "g" in color &&
+      "b" in color
+    ) {
+      return `rgb(${color.r}, ${color.g}, ${color.b})`;
+    }
+    // Default fallback
+    return "#000000";
+  };
+
   // Set initial quality based on device capabilities
   useEffect(() => {
     setQuality(deviceCapabilities.initialQuality);
@@ -107,17 +165,17 @@ export const AudioVisualizer = ({
     u_bass: { value: 0.5 },
     u_mid: { value: 0.5 },
     u_treble: { value: 0.5 },
-    u_red: { value: initialColors?.red ?? 0.8745 },
-    u_green: { value: initialColors?.green ?? 0.4314 },
-    u_blue: { value: initialColors?.blue ?? 0.6902 },
+    u_red: { value: orbColors?.red ? orbColors?.red / 255 : 1.0 },
+    u_green: { value: orbColors?.green ? orbColors?.green / 255 : 1.0 },
+    u_blue: { value: orbColors?.blue ? orbColors?.blue / 255 : 1.0 },
     u_detail: { value: getDetailLevel(quality) }, // Control noise detail level
   });
 
   // Bloom parameters with default values
   const bloomParamsRef = useRef<BloomParams>({
-    threshold: initialBloom?.threshold ?? 0.5,
-    strength: initialBloom?.strength ?? 0.2,
-    radius: initialBloom?.radius ?? 0.5,
+    threshold: initialGlow?.threshold ?? 0.5,
+    strength: initialGlow?.strength ?? 0.2,
+    radius: initialGlow?.radius ?? 0.5,
   });
 
   useEffect(() => {
@@ -128,7 +186,7 @@ export const AudioVisualizer = ({
 
     // Create scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+    scene.background = parseColor(canvasColor);
     sceneRef.current = scene;
 
     // Create clock for animation
@@ -169,6 +227,7 @@ export const AudioVisualizer = ({
       };
 
       renderer.setPixelRatio(getOptimalPixelRatio());
+      renderer.setClearColor(parseColor(canvasColor).getHex(), 1);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
 
       // Clear any existing canvas
@@ -182,9 +241,9 @@ export const AudioVisualizer = ({
       // Add OrbitControls if enabled
       if (enableOrbitControls) {
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.enableZoom = true;
+        controls.enableDamping = inertiaEnabled;
+        controls.dampingFactor = inertiaLevel;
+        controls.enableZoom = zoomEnabled;
         controls.autoRotate = autoRotate;
         controls.update();
       }
@@ -365,8 +424,11 @@ export const AudioVisualizer = ({
     enableOrbitControls,
     autoRotate,
     showGui,
-    initialColors,
-    initialBloom,
+    orbColors,
+    initialGlow,
+    inertiaEnabled,
+    inertiaLevel,
+    zoomEnabled,
   ]);
 
   // Handle mouse movement for camera control
@@ -438,21 +500,21 @@ export const AudioVisualizer = ({
       }
 
       // Calculate FPS for stats display
-      if (showStats) {
-        const fps = 1000 / deltaTime;
-        fpsHistoryRef.current.push(fps);
-        if (fpsHistoryRef.current.length > 30) {
-          fpsHistoryRef.current.shift();
-        }
+      // if (showStats) {
+      //   const fps = 1000 / deltaTime;
+      //   fpsHistoryRef.current.push(fps);
+      //   if (fpsHistoryRef.current.length > 30) {
+      //     fpsHistoryRef.current.shift();
+      //   }
 
-        // Update FPS display every 10 frames
-        if (fpsHistoryRef.current.length % 10 === 0) {
-          const avgFps =
-            fpsHistoryRef.current.reduce((sum, val) => sum + val, 0) /
-            fpsHistoryRef.current.length;
-          setFps(Math.round(avgFps));
-        }
-      }
+      //   // Update FPS display every 10 frames
+      //   if (fpsHistoryRef.current.length % 10 === 0) {
+      //     const avgFps =
+      //       fpsHistoryRef.current.reduce((sum, val) => sum + val, 0) /
+      //       fpsHistoryRef.current.length;
+      //     setFps(Math.round(avgFps));
+      //   }
+      // }
 
       // Camera follows mouse with smooth easing
       cameraRef.current.position.x +=
@@ -502,27 +564,24 @@ export const AudioVisualizer = ({
               trebleSum /
                 Math.ceil((bufferLength - trebleStart) / sampleStep) || 0;
 
-            // Apply smoothing to prevent sudden jumps
-            const smoothingFactor = 0.7; // Higher value = more responsive
-
             // Apply audio data to uniforms with high multipliers for visible effect
             uniformsRef.current.u_bass.value =
-              uniformsRef.current.u_bass.value * (1 - smoothingFactor) +
-              (bassAvg / 255) * 5 * smoothingFactor;
+              uniformsRef.current.u_bass.value * (1 - smoothnessLevel) +
+              (bassAvg / 255) * spikeLevel * smoothnessLevel;
 
             uniformsRef.current.u_mid.value =
-              uniformsRef.current.u_mid.value * (1 - smoothingFactor) +
-              (midAvg / 255) * 5 * smoothingFactor;
+              uniformsRef.current.u_mid.value * (1 - smoothnessLevel) +
+              (midAvg / 255) * spikeLevel * smoothnessLevel;
 
             uniformsRef.current.u_treble.value =
-              uniformsRef.current.u_treble.value * (1 - smoothingFactor) +
-              (trebleAvg / 255) * 5 * smoothingFactor;
+              uniformsRef.current.u_treble.value * (1 - smoothnessLevel) +
+              (trebleAvg / 255) * spikeLevel * smoothnessLevel;
 
             // Overall amplitude based on average volume
             const avgVolume = (bassAvg + midAvg + trebleAvg) / 3;
             uniformsRef.current.u_amplitude.value =
-              uniformsRef.current.u_amplitude.value * (1 - smoothingFactor) +
-              (0.5 + (avgVolume / 255) * 5) * smoothingFactor;
+              uniformsRef.current.u_amplitude.value * (1 - smoothnessLevel) +
+              (0.5 + (avgVolume / 255) * spikeLevel) * smoothnessLevel;
           } catch (error) {
             console.error("Error in animation loop:", error);
             // Fall back to gentle animation on error
@@ -579,7 +638,14 @@ export const AudioVisualizer = ({
         animationFrameRef.current = null;
       }
     };
-  }, [mousePosition, audioData, isListening, quality, showStats]);
+  }, [
+    mousePosition,
+    audioData,
+    isListening,
+    quality,
+    smoothnessLevel,
+    spikeLevel,
+  ]);
 
   return (
     <div
@@ -589,28 +655,11 @@ export const AudioVisualizer = ({
         width: "100%",
         height: "100%",
         overflow: "hidden",
-        backgroundColor: "#000",
+        backgroundColor: colorToCssString(canvasColor),
         position: "relative",
-        ...options?.containerStyle,
+        ...containerStyle,
       }}
       className={className}
-    >
-      {showStats && (
-        <div
-          style={{
-            position: "absolute",
-            top: "8px",
-            right: "8px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            color: "white",
-            padding: "8px",
-            borderRadius: "4px",
-          }}
-        >
-          <p>FPS: {fps}</p>
-          <p>Quality: {quality}</p>
-        </div>
-      )}
-    </div>
+    ></div>
   );
 };
