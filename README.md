@@ -68,24 +68,104 @@ import { AudioVisualizer, useAudioListener } from 'audio-visualizer';
 
 const App = () => {
   const { isListening, audioData, error, startListening, stopListening } = useAudioListener();
+  // Customizable options
+  const options: VisualizerOptions = {
+    // Controls the overall visual quality and performance of the visualizer
+    // "low": Lower resolution and effects for better performance on weaker devices
+    // "medium": Balanced quality and performance (default)
+    // "high": Maximum visual quality but may impact performance on some devices
+    initialQuality: "medium" as "low" | "medium" | "high",
+
+    // Defines the color of the visual elements (orbs) in the visualizer
+    // Values range from 0-255 for each RGB component
+    // This example shows orange
+    orbColors: {
+      red: 249,
+      green: 115,
+      blue: 22,
+    },
+
+    // Sets the background color of the visualizer
+    // Can be a hex color string (like "#0a0a0a"), RGB object
+    // This is a dark gray background
+    canvasColor: "#0a0a0a",
+
+    // Controls the glow/bloom effect that makes bright parts of the visualization shine
+    initialGlow: {
+      // Brightness level required before glow is applied (0-1)
+      // Lower values make more elements glow
+      threshold: 0.3,
+
+      // Intensity of the glow effect (0-3)
+      // Higher values create stronger glow
+      strength: 0.2,
+
+      // How far the glow spreads (0-1)
+      // Higher values create a more diffuse glow
+      radius: 0.5,
+    },
+
+    // When enabled, the visualization continues to move slightly after you drag it
+    // Like how a globe continues to spin after you push it
+    inertiaEnabled: true,
+
+    // Controls how much momentum/inertia is applied when moving the visualization
+    // Range: 0-1 (higher values = more inertia)
+    // Higher values make the visualization continue moving longer after interaction
+    inertiaLevel: 0.05,
+
+    // Allows zooming in and out of the visualization (usually with mouse wheel)
+    // When enabled, you can zoom in to see details or zoom out for a wider view
+    zoomEnabled: true,
+
+    // Controls how dramatically the visualization reacts to audio
+    // Higher values create larger, more pronounced spikes in response to sound
+    // Think of this as the "sensitivity" to sound
+    spikeLevel: 5.5,
+
+    // Controls how quickly the visualization responds to changes in audio
+    // Range: 0-1 (higher values = more responsive/less smooth)
+    // Lower values make transitions more gradual, higher values make it react more immediately
+    smoothnessLevel: 0.7,
+
+    // Enables mouse/touch controls to rotate and move around the visualization
+    // When enabled, you can drag to rotate the visualization in 3D space
+    enableOrbitControls: true,
+
+    // Makes the visualization slowly rotate automatically without user input
+    // Creates a dynamic, always-moving effect even when nobody is interacting with it
+    autoRotate: true,
+
+    // Shows or hides an interactive control panel for adjusting visualizer settings
+    // When enabled, displays sliders and controls to change colors, effects, etc. in real-time
+    showGui: true,
+
+    // Adds a custom CSS class to the visualizer container for styling
+    // Allows you to apply custom CSS styles to the visualizer
+    className: "custom-visualizer",
+
+    // Applies inline CSS styles directly to the visualizer container
+    // Standard React inline style object
+    containerStyle: {
+      // Sets the height to 80% of the viewport height
+      height: "65vh",
+    },
+  };
   
   return (
     <div style={{ width: '100%', height: '500px' }}>
       <AudioVisualizer 
-        audioData={audioData} 
+        audioData={audioData}
         isListening={isListening}
-        initialQuality="high"
-        orbColors={{ red: 0.8, green: 0.2, blue: 0.7 }}
-        initialGlow={{ threshold: 0.4, strength: 0.7, radius: 0.5 }}
-        enableOrbitControls={true}
-        autoRotate={true}
-        showGui={true}
-        inertiaEnabled={true}
-        inertiaLevel={0.05}
-        zoomEnabled={false}
-        spikeLevel={5.5}
-        smoothnessLevel={0.7}
-        className="my-visualizer"
+        initialQuality={options.initialQuality}
+        orbColors={options.orbColors}
+        canvasColor={options.canvasColor}
+        initialGlow={options.initialGlow}
+        enableOrbitControls={options.enableOrbitControls}
+        autoRotate={options.autoRotate}
+        showGui={options.showGui}
+        className={options.className}
+        containerStyle={options.containerStyle}
       />
       <button onClick={isListening ? stopListening : startListening}>
         {isListening ? 'Stop' : 'Start'} Listening
