@@ -26,6 +26,26 @@ export default {
       boxShadow: {
         visualizer: "0 10px 30px rgba(0, 0, 0, 0.5)",
       },
+      animation: {
+        'gradient-x': 'gradient-x 8s ease infinite',
+        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'bounce-slow': 'bounce 2s infinite',
+      },
+      keyframes: {
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center',
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center',
+          },
+        },
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
     },
   },
   plugins: [],
